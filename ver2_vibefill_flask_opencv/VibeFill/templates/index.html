@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-lang-en="Digital Painting Stream" data-lang-fa="استریم نقاشی دیجیتال">استریم نقاشی دیجیتال</title>
+  <meta name="description" content="پلتفرم پیشرفته نقاشی دیجیتال با استریم زنده، کنترل سروو و گالری تصاویر. خلاقیت خود را با فناوری مدرن به نمایش بگذارید!">
+  <meta name="keywords" content="نقاشی دیجیتال, استریم زنده, هنر دیجیتال, کنترل سروو, گالری تصاویر, وب‌سوکت, فلاسک">
+  <meta name="author" content="a_ra_80">
+  <meta property="og:title" content="استریم نقاشی دیجیتال">
+  <meta property="og:description" content="با پلتفرم نقاشی دیجیتال ما، آثار هنری خود را در لحظه خلق کنید و از استریم زنده و گالری تصاویر لذت ببرید.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="/static/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="dark-mode">
+  <header class="main-header">
+    <div class="header-logo">
+      <img src="/static/logo.png" alt="Logo" aria-label="Site Logo">
+      <span data-key="siteTitle">استریم نقاشی دیجیتال</span>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="#home" data-key="navHome"><i class="fas fa-home nav-icon"></i><span>خانه</span></a></li>
+        <li><a href="#about" data-key="navAbout"><i class="fas fa-info-circle nav-icon"></i><span>درباره ما</span></a></li>
+        <li><a href="#gallery" data-key="navGallery"><i class="fas fa-images nav-icon"></i><span>گالری</span></a></li>
+        <li><a href="#contact" data-key="navContact"><i class="fas fa-envelope nav-icon"></i><span>تماس با ما</span></a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button id="langToggle" aria-label="Change Language" title="Change Language">
+        <i class="fas fa-language"></i>
+      </button>
+      <button id="themeToggle" aria-label="Change Theme" title="Change Theme">
+        <i class="fas fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-panel container">
+    <section class="accordion intro-accordion mb-4" id="introAccordion">
+      <article class="accordion-item">
+        <h1 class="accordion-header" id="introHeading">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#introCollapse" aria-expanded="false" aria-controls="introCollapse">
+            <i class="fas fa-info-circle me-2"></i> <span data-key="introHeading">معرفی سیستم</span>
+          </button>
+        </h1>
+        <div id="introCollapse" class="accordion-collapse collapse" aria-labelledby="introHeading" data-bs-parent="#introAccordion">
+          <div class="accordion-body">
+            <div class="intro-text" data-key="introText">
+              <p>کاربر گرامی، به <strong>جهان خلاقیت دیجیتال</strong> خوش آمدید! پلتفرم پیشرفته نقاشی دیجیتال ما، دروازه‌ای به سوی تجربه‌ای بی‌نظیر از <em>هنر و فناوری</em> است.</p>
+              <p>با بهره‌گیری از <strong>کنترل دقیق سرووها</strong>، <strong>استریم زنده با کیفیت بالا</strong> و <strong>اتصال لحظه‌ای وب‌سوکت</strong>، این سیستم شما را به خلق آثار هنری بی‌مانند دعوت می‌کند. کافیست رنگ دلخواه خود را انتخاب کنید و با حرکات انگشت، شاهکارهایی خلاقانه بر بوم دیجیتال بیافرینید.</p>
+              <p>طراحی شده بر پایه چارچوب <em>Flask</em> و فناوری <em>WebSocket</em>، این پلتفرم تغییرات رنگ و موقعیت سرووها را در <strong>لحظه</strong> به نمایش می‌گذارد. با تنظیمات حرفه‌ای دوربین و سروو، زوایا را به دلخواه تغییر دهید و از <em>نمای زنده</em> لذت ببرید.</p>
+              <p>گالری تصاویر ما با فناوری <em>AJAX</em> به‌صورت خودکار به‌روزرسانی می‌شود تا آثار جدید شما در لحظه به نمایش درآیند، بدون نیاز به بارگذاری مجدد.</p>
+              <p>ما در تلاشیم تا با ارائه محیطی <strong>پویا</strong>، <strong>تعاملی</strong> و <strong>کاربرپسند</strong>، خلاقیت شما را در دنیای هنر دیجیتال به اوج برسانیم.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="accordion" id="mainAccordion">
+      <article class="accordion-item camera-servo mb-4">
+        <h2 class="accordion-header" id="headingStream">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStream" aria-expanded="false" aria-controls="collapseStream">
+            <i class="fas fa-paint-brush me-2"></i> <span data-key="cameraControl">کنترل دوربین و سرووها</span>
+          </button>
+        </h2>
+        <div id="collapseStream" class="accordion-collapse collapse" aria-labelledby="headingStream" data-bs-parent="#mainAccordion">
+          <div class="accordion-body">
+            <div class="stream-section">
+              <div class="section-title"><i class="fas fa-stream me-2"></i><span data-key="liveStream">استریم زنده</span></div>
+              <div id="streamPlaceholder" class="stream-placeholder">
+                <i class="fas fa-play"></i>
+              </div>
+              <div class="stream-controls d-flex gap-2 mt-3">
+                <button id="toggleStreamBtn" class="btn btn-custom btn-send flex-grow-1">
+                  <i class="fas fa-stream me-2"></i> <span id="streamBtnText" data-key="startStream">شروع استریم</span>
+                </button>
+                <button id="deviceModeToggle" class="btn btn-custom btn-increment" aria-label="Toggle Device Mode" title="Toggle Device Mode">
+                  <i class="fas fa-mobile-alt me-2"></i> <span id="deviceModeText" data-key="desktopMode">حالت دسکتاپ</span>
+                </button>
+              </div>
+            </div>
+            <div class="color-dropdown">
+              <div class="section-title"><i class="fas fa-palette me-2"></i><span data-key="colorSelection">انتخاب رنگ</span></div>
+              <label for="colorSelect" data-key="colorSelectLabel">انتخاب رنگ برای نقاشی:</label>
+              <select id="colorSelect" class="form-select">
+                <option value="red" data-key="colorRed">قرمز</option>
+                <option value="Crimson" data-key="colorCrimson">زرشکی</option>
+                <option value="orange" data-key="colorOrange">نارنجی</option>
+                <option value="green" data-key="colorGreen">سبز</option>
+                <option value="yellow" data-key="colorYellow">زرد</option>
+                <option value="purple" data-key="colorPurple">بنفش</option>
+                <option value="brown" data-key="colorBrown">قهوه‌ای</option>
+                <option value="pink" data-key="colorPink">صورتی</option>
+                <option value="blue" selected data-key="colorBlue">آبی</option>
+                <option value="cyan" data-key="colorCyan">فیروزه‌ای</option>
+                <option value="magenta" data-key="colorMagenta">ارغوانی</option>
+                <option value="white" data-key="colorWhite">سفید</option>
+                <option value="gray" data-key="colorGray">خاکستری</option>
+                <option value="light_blue" data-key="colorLightBlue">آبی روشن</option>
+                <option value="dark_blue" data-key="colorDarkBlue">آبی تیره</option>
+                <option value="light_green" data-key="colorLightGreen">سبز روشن</option>
+                <option value="dark_green" data-key="colorDarkGreen">سبز تیره</option>
+                <option value="olive" data-key="colorOlive">زیتونی</option>
+                <option value="teal" data-key="colorTeal">سبزآبی</option>
+                <option value="violet" data-key="colorViolet">نیلی</option>
+                <option value="gold" data-key="colorGold">طلایی</option>
+                <option value="silver" data-key="colorSilver">نقره‌ای</option>
+              </select>
+              <button id="sendColorBtn" class="btn btn-custom btn-send mt-3">
+                <i class="fas fa-palette me-2"></i><span data-key="sendColor">ارسال رنگ</span>
+              </button>
+            </div>
+            <div class="action-dropdown">
+              <div class="section-title"><i class="fas fa-tools me-2"></i><span data-key="paintingActions">اقدامات نقاشی</span></div>
+              <label for="actionSelect" data-key="actionSelectLabel">اقدامات نقاشی:</label>
+              <select id="actionSelect" class="form-select">
+                <option value="Eraser" data-key="actionEraser">پاک‌کن</option>
+                <option value="save_painting" data-key="actionSavePainting">ذخیره نقاشی</option>
+                <option value="next_design" data-key="actionNextDesign">طرح بعدی</option>
+                <option value="previous_design" data-key="actionPreviousDesign">طرح قبلی</option>
+                <option value="reset_changes" data-key="actionResetChanges">بازنشانی تغییرات</option>
+                <option value="undo" data-key="actionUndo">عقب‌گرد</option>
+              </select>
+              <button id="sendActionBtn" class="btn btn-custom btn-send mt-3">
+                <i class="fas fa-tools me-2"></i><span data-key="sendAction">ارسال اقدام</span>
+              </button>
+            </div>
+            <div class="servo-section">
+              <div class="section-title"><i class="fas fa-cog me-2"></i><span data-key="servoControl">کنترل سرووها</span></div>
+              <form id="servoForm" class="mt-4 control-panel">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="servoX" class="form-label">
+                      <i class="fas fa-arrows-alt-h me-2"></i><span data-key="axisX">محور X</span>: 
+                      <span id="servoXValue" class="slider-value">90</span>°
+                    </label>
+                    <input type="range" class="form-range" id="servoX" name="servoX" min="0" max="180" value="90" aria-label="Adjust X Axis">
+                    <input type="number" class="form-control mt-2" id="servoXNumber" min="0" max="180" value="90" aria-label="X Axis Value">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="servoY" class="form-label">
+                      <i class="fas fa-arrows-alt-v me-2"></i><span data-key="axisY">محور Y</span>: 
+                      <span id="servoYValue" class="slider-value">90</span>°
+                    </label>
+                    <input type="range" class="form-range" id="servoY" name="servoY" min="0" max="180" value="90" aria-label="Adjust Y Axis">
+                    <input type="number" class="form-control mt-2" id="servoYNumber" min="0" max="180" value="90" aria-label="Y Axis Value">
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <label class="form-label" data-key="incrementalAdjustment"><i class="fas fa-cog me-2"></i>تنظیم تدریجی (5 درجه):</label>
+                  <div class="row g-2">
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('X', 5)" aria-label="Increase X Axis">
+                        <i class="fas fa-plus"></i> <span data-key="incrementXPlus">X +5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('X', -5)" aria-label="Decrease X Axis">
+                        <i class="fas fa-minus"></i> <span data-key="incrementXMinus">X -5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('Y', 5)" aria-label="Increase Y Axis">
+                        <i class="fas fa-plus"></i> <span data-key="incrementYPlus">Y +5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('Y', -5)" aria-label="Decrease Y Axis">
+                        <i class="fas fa-minus"></i> <span data-key="incrementYMinus">Y -5°</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-grid gap-3 mt-4">
+                  <button type="submit" class="btn btn-send btn-custom" aria-label="Send Servo Settings">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    <span data-key="send">ارسال</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="accordion-item">
+        <h2 class="accordion-header" id="headingGallery">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGallery" aria-expanded="false" aria-controls="collapseGallery">
+            <i class="fas fa-images me-2"></i> <span data-key="gallery">گالری تصاویر</span>
+          </button>
+        </h2>
+        <div id="collapseGallery" class="accordion-collapse collapse" aria-labelledby="headingGallery" data-bs-parent="#mainAccordion">
+          <div class="accordion-body">
+            <div id="galleryContainer" class="gallery-container"></div>
+            <div class="gallery-nav">
+              <button id="prevImagesBtn" class="gallery-nav-btn prev" data-key="prevImages">
+                <i class="fas fa-arrow-left"></i> <span>تصاویر قدیمی‌تر</span>
+              </button>
+              <button id="nextImagesBtn" class="gallery-nav-btn next" data-key="nextImages">
+                <i class="fas fa-arrow-right"></i> <span>تصاویر جدیدتر</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section about">
+        <h3 data-key="footerAbout">درباره ما</h3>
+        <p data-key="footerAboutText">ما پلتفرمی خلاقانه برای نقاشی دیجیتال با فناوری پیشرفته ارائه می‌دهیم.</p>
+      </div>
+      <div class="footer-section links">
+        <h3 data-key="footerLinks">لینک‌های مفید</h3>
+        <ul>
+          <li><a href="#home" data-key="navHome">خانه</a></li>
+          <li><a href="#gallery" data-key="navGallery">گالری</a></li>
+          <li><a href="#contact" data-key="navContact">تماس</a></li>
+        </ul>
+      </div>
+      <div class="footer-section connect">
+        <h3 data-key="footerConnect">با ما در ارتباط باشید</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-key="footerCopyright">© 2025 استریم نقاشی دیجیتال. تمامی حقوق محفوظ است.</p>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="imageModalLabel" data-key="viewImage">نمایش تصویر</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" class="modal-img" src="" alt="Digital Painting Image" loading="lazy">
+        </div>
+        <div class="modal-footer">
+          <a id="downloadBtn" href="#" download class="btn btn-success" data-key="download"><i class="fas fa-download me-2"></i>دانلود</a>
+          <button type="button" class="btn btn-danger" id="deleteBtn" data-key="deleteImage"><i class="fas fa-trash me-2"></i>حذف تصویر</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="close"><i class="fas fa-times me-2"></i>بستن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/script.js"></script>
+</body>
+</html>

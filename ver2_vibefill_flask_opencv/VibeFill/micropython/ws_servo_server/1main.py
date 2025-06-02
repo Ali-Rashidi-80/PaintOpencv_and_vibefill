@@ -1,0 +1,112 @@
+import wifi
+import ujson
+import uasyncio as asyncio
+import time
+import math
+from machine import Pin, PWM
+
+
+try:
+    import client as ws_client
+except ImportError:
+    raise ImportError("کتابخانه uwebsocket.client یافت نشد. لطفاً آن را از https://github.com/danni/uwebsockets دانلود کرده و به پوشه lib/ انتقال دهید.")
+
+
+class ServoController:
+    def __init__(self, pin_num, angle_file):
+        self.angle_file = angle_file
+        self.servo_pwm = PWM(Pin(pin_num))
+        self.servo_pwm.freq(50)
+    def save_angle(self, angle):
+        try:
+            with open(self.angle_file, "w") as f:
+                ujson.dump({"angle": angle}, f)
+        except Exception as e:
+            print("⚠️ خطا در ذخیره زاویه:", e)
+    def load_angle(self):
+        try:
+            with open(self.angle_file, "r") as f:
+                data = ujson.load(f)
+                angle = data.get("angle", 90)
+                return max(0, min(180, angle))
+        except Exception as e:
+            print("⚠️ خطا در بازیابی زاویه، مقدار پیش‌فرض 90:", e)
+            return 90
+    def angle_to_duty(self, angle):
+        MIN_DUTY = 1400
+        MAX_DUTY = 8000
+        return int(MIN_DUTY + (angle / 180) * (MAX_DUTY - MIN_DUTY))
+    def set_angle(self, current, target):
+        current = max(0, min(180, current))
+        target = max(0, min(180, target))
+        if current == target:
+            return target
+        distance = abs(target - current)
+        steps = max(1, int(distance))
+        for i in range(1, steps + 1):
+            progress = i / steps
+            smooth_progress = 0.5 - 0.5 * math.cos(progress * math.pi)
+            new_angle = current + (target - current) * smooth_progress
+            new_angle = max(0, min(180, new_angle))
+            duty = self.angle_to_duty(new_angle)
+            try:
+                self.servo_pwm.duty_u16(duty)
+            except Exception as e:
+                print("⚠️ خطا در تنظیم PWM:", e)
+            self.save_angle(new_angle)
+            time.sleep(0.02 + 0.03 * (1 - smooth_progress))
+        try:
+            self.servo_pwm.duty_u16(self.angle_to_duty(target))
+        except Exception as e:
+            print("⚠️ خطا در تنظیم PWM:", e)
+        self.save_angle(target)
+        time.sleep(0.1)
+        return target
+
+servo1 = ServoController(pin_num=2, angle_file="servo1.json")
+servo2 = ServoController(pin_num=3, angle_file="servo2.json")
+current_angle1 = servo1.load_angle()
+current_angle2 = servo2.load_angle()
+
+WS_URL = "ws://services.irn9.chabokan.net:59713/ws"
+
+def process_command(cmd):
+    try:
+        servo1_target = int(cmd.get('servo1', 90))
+        servo2_target = int(cmd.get('servo2', 90))
+        print("📥 دریافت دستور: Servo1 =", servo1_target,  "  ||   Servo2 =", servo2_target)
+        global current_angle1, current_angle2
+        current_angle1 = servo1.set_angle(current_angle1, servo1_target)
+        current_angle2 = servo2.set_angle(current_angle2, servo2_target)
+    except Exception as e:
+        print("⚠️ خطا در پردازش دستور:", e)
+
+async def websocket_client():
+    while True:
+        try:
+            print("در حال اتصال به وب‌سوکت...")
+            ws = ws_client.connect(WS_URL)
+            print("اتصال وب‌سوکت برقرار شد")
+            while True:
+                data = ws.recv()
+                if data:
+                    try:
+                        msg = ujson.loads(data)
+                        if 'servo1' in msg and 'servo2' in msg:
+                            process_command(msg)
+                    except Exception as e:
+                        print("⚠️ خطا در پردازش پیام:", e)
+                await asyncio.sleep(0.1)
+        except Exception as e:
+            print("❌ خطا در اتصال وب‌سوکت:", e)
+            await asyncio.sleep(5)
+
+async def main():
+    asyncio.create_task(websocket_client())
+    while True:
+        await asyncio.sleep(1)
+
+wifi.start()
+asyncio.run(main())
+
+

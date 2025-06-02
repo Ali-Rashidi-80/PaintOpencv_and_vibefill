@@ -1,0 +1,1 @@
+python -m PyInstaller --onefile --add-data "c:/Program Files/Python312/Lib/site-packages/mediapipe/modules;mediapipe/modules" --add-data "toolbar;toolbar" --add-data "HandModule.py;." --windowed --upx-dir "C:\upx-4.2.4-win64" --icon=1.ico main.py

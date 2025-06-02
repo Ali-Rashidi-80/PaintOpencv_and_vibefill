@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-lang-en="Digital Painting Stream" data-lang-fa="استریم نقاشی دیجیتال">استریم نقاشی دیجیتال</title>
+  <meta name="description" content="پلتفرم پیشرفته نقاشی دیجیتال با استریم زنده، کنترل سروو و گالری تصاویر. خلاقیت خود را با فناوری مدرن به نمایش بگذارید!">
+  <meta name="keywords" content="نقاشی دیجیتال, استریم زنده, هنر دیجیتال, کنترل سروو, گالری تصاویر, وب‌سوکت, فلاسک">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="xAI">
+  <meta property="og:title" content="استریم نقاشی دیجیتال">
+  <meta property="og:description" content="با پلتفرم نقاشی دیجیتال ما، آثار هنری خود را در لحظه خلق کنید و از استریم زنده و گالری تصاویر لذت ببرید.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourwebsite.com">
+  <meta property="og:image" content="https://yourwebsite.com/static/images/preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="استریم نقاشی دیجیتال">
+  <meta name="twitter:description" content="پلتفرم پیشرفته برای خلق آثار هنری دیجیتال با استریم زنده و کنترل سروو.">
+  <meta name="twitter:image" content="https://yourwebsite.com/static/images/preview.jpg">
+  <link rel="icon" type="image/png" href="/static/favicon.ico">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'B Nazanin';
+      src: url("{{ url_for('static', filename='fonts/BNazanin.ttf') }}");
+    }
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #1cc88a;
+      --accent-color: #e74a3b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #2c3e50;
+      --text-light: #343a40;
+      --text-dark: #ecf0f1;
+      --hover-light: #d1e3f8;
+      --hover-dark: #3b5360;
+      --border-gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      --header-bg-light: #ffffff;
+      --header-bg-dark: #2c3e50;
+      --footer-bg-light: #f1f2f6;
+      --footer-bg-dark: #2c3e50;
+      --notification-success: #28a745;
+      --notification-error: #dc3545;
+      --notification-info: #17a2b8;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'B Nazanin', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-light);
+      color: var(--text-light);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      direction: rtl;
+      text-align: right;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    body.lang-en {
+      direction: ltr;
+      text-align: left;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    /* Header Styles */
+    header.main-header {
+      background: var(--border-gradient);
+      padding: clamp(10px, 2vw, 15px) clamp(15px, 2vw, 20px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.3s ease;
+      will-change: transform;
+    }
+    body.dark-mode header.main-header {
+      background: linear-gradient(45deg, var(--bg-dark), var(--hover-dark));
+    }
+    header.main-header.hidden {
+      transform: translateY(-100%);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 clamp(10px, 2vw, 15px);
+    }
+    .header-logo img {
+      width: clamp(40px, 5vw, 50px);
+      height: clamp(40px, 5vw, 50px);
+      border-radius: 50%;
+      object-fit: cover;
+      aspect-ratio: 1/1;
+      transition: transform 0.3s ease;
+    }
+    .header-logo img:hover {
+      transform: scale(1.1);
+    }
+    .header-logo span {
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    body.lang-fa .header-logo span {
+      margin-right: 10px;
+    }
+    body.lang-en .header-logo span {
+      margin-left: 10px;
+    }
+    .header-nav {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .header-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: clamp(15px, 3vw, 30px);
+    }
+    .header-nav a {
+      color: #fff;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      text-decoration: none;
+      transition: color 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .header-nav a:hover {
+      color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    .header-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary-color);
+      transition: width 0.3s;
+    }
+    body.lang-en .header-nav a::after {
+      right: auto;
+      left: 0;
+    }
+    .header-nav a:hover::after {
+      width: 100%;
+    }
+    .header-controls {
+      display: flex;
+      gap: clamp(8px, 1.5vw, 12px);
+      margin: 0 clamp(10px, 2vw, 15px);
+    }
+    .header-controls button {
+      border: none;
+      border-radius: 50px;
+      padding: clamp(8px, 1.5vw, 10px) clamp(15px, 2vw, 22px);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: linear-gradient(45deg, var(--bg-dark), var(--hover-dark));
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+    }
+    body.dark-mode .header-controls button {
+      background: linear-gradient(45deg, #34495e, #4a6072);
+    }
+    .header-controls button:hover {
+      transform: scale(1.07);
+      background: var(--border-gradient);
+    }
+    .header-controls i {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      transition: color 0.3s;
+    }
+    body.lang-fa .header-controls i {
+      margin-left: 8px;
+    }
+    body.lang-en .header-controls i {
+      margin-right: 8px;
+    }
+    .header-controls button:hover i {
+      color: var(--secondary-color);
+    }
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      font-size: clamp(1.5rem, 3vw, 1.8rem);
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s;
+      padding: 10px;
+    }
+    .hamburger:hover {
+      transform: scale(1.1);
+    }
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: clamp(60px, 10vw, 80px);
+      left: 0;
+      right: 0;
+      background: var(--bg-dark);
+      height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
+      z-index: 999;
+    }
+    body.dark-mode .nav-mobile {
+      background: #1e2a38;
+    }
+    .nav-mobile.active {
+      transform: translateY(0);
+    }
+    .nav-mobile ul {
+      flex-direction: column;
+      gap: 20px;
+      padding: 0;
+    }
+    .nav-mobile a {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      color: var(--text-dark);
+    }
+    .nav-mobile a:hover {
+      color: var(--secondary-color);
+    }
+    /* Responsive Header */
+    @media (max-width: 768px) {
+      .header-nav {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .nav-mobile {
+        display: flex;
+      }
+      .header-controls {
+        margin: 0 10px;
+      }
+      header.main-header {
+        padding: 10px;
+      }
+      .header-logo {
+        margin: 0 10px;
+      }
+    }
+    @media (max-width: 576px) {
+      .header-logo img {
+        width: 35px;
+        height: 35px;
+      }
+      .header-logo span {
+        font-size: 1.1rem;
+      }
+      .header-controls button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+    }
+    /* Footer Styles */
+    footer {
+      background: var(--footer-bg-light);
+      color: var(--text-light);
+      padding: clamp(20px, 5vw, 40px) 0;
+      margin-top: clamp(20px, 5vw, 40px);
+      border-top: 4px solid var(--primary-color);
+    }
+    body.dark-mode footer {
+      background: var(--footer-bg-dark);
+      color: var(--text-dark);
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: clamp(20px, 3vw, 30px);
+      padding: 0 clamp(10px, 2vw, 20px);
+    }
+    .footer-section h3 {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      margin-bottom: 20px;
+      position: relative;
+      color: var(--secondary-color);
+    }
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--border-gradient);
+    }
+    body.lang-en .footer-section h3::after {
+      right: auto;
+      left: 0;
+    }
+    .footer-section p, .footer-section ul {
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      line-height: 1.8;
+    }
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+    .footer-section ul li a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-section ul li a:hover {
+      color: var(--secondary-color);
+    }
+    .footer-section .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+    .footer-section .social-icons a {
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      color: inherit;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .footer-section .social-icons a:hover {
+      color: var(--accent-color);
+      transform: scale(1.2);
+    }
+    .footer-bottom {
+      text-align: center;
+      margin-top: clamp(20px, 3vw, 30px);
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-bottom p {
+      margin: 0;
+      font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    }
+    /* Main Panel */
+    .main-panel {
+      max-width: 1200px;
+      margin: clamp(80px, 15vw, 120px) auto clamp(20px, 5vw, 40px);
+      padding: clamp(10px, 2vw, 20px);
+    }
+    .accordion-button {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      font-weight: bold;
+      background: var(--border-gradient);
+      color: #fff;
+      border: none;
+      border-radius: 10px !important;
+      transition: background 0.3s, transform 0.2s;
+      padding: clamp(10px, 2vw, 15px);
+    }
+    body.lang-en .accordion-button {
+      text-align: left;
+    }
+    .accordion-button:not(.collapsed) {
+      background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+    }
+    .accordion-button:hover {
+      transform: translateY(-2px);
+    }
+    .accordion-button i {
+      font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+      transition: transform 0.3s;
+    }
+    body.lang-fa .accordion-button i.me-2 {
+      margin-left: 12px;
+    }
+    body.lang-en .accordion-button i.me-2 {
+      margin-right: 8px;
+      margin-left: 0;
+    }
+    .accordion-button:hover i {
+      transform: scale(1.1);
+    }
+    .accordion-body {
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      padding: clamp(15px, 3vw, 25px);
+      margin-top: 8px;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+    body.dark-mode .accordion-body {
+      background: #3b4a5a;
+      color: var(--text-dark);
+    }
+    .accordion-item {
+      margin-bottom: clamp(10px, 2vw, 15px);
+      border: none;
+      background: transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .accordion-item.camera-servo {
+      border: 2px solid transparent;
+      background: var(--border-gradient);
+      background-clip: padding-box;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .accordion-item.camera-servo::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: var(--border-gradient);
+      z-index: -1;
+      border-radius: 12px;
+    }
+    .intro-text {
+      line-height: 2;
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    body.lang-en .intro-text {
+      text-align: left;
+    }
+    .intro-text p {
+      margin-bottom: 1.5rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .intro-text strong {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    .intro-text em {
+      color: var(--secondary-color);
+      font-style: italic;
+      font-weight: 500;
+    }
+    .color-dropdown, .action-dropdown, .stream-section, .servo-section {
+      margin-top: clamp(15px, 2vw, 20px);
+      padding: clamp(10px, 2vw, 15px);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    body.dark-mode .color-dropdown, body.dark-mode .action-dropdown, 
+    body.dark-mode .stream-section, body.dark-mode .servo-section {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .color-dropdown:hover, .action-dropdown:hover, 
+    .stream-section:hover, .servo-section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .section-title {
+      font-size: clamp(1.1rem, 2vw, 1.2rem);
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: clamp(10px, 2vw, 15px);
+      position: relative;
+      padding-bottom: 8px;
+    }
+    body.dark-mode .section-title {
+      color: var(--text-dark);
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--border-gradient);
+    }
+    body.lang-en .section-title::after {
+      right: auto;
+      left: 0;
+    }
+    .section-title i {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+    body.lang-fa .section-title i {
+      margin-left: 12px;
+    }
+    body.lang-en .section-title i {
+      margin-right: 8px;
+    }
+    .color-dropdown label, .action-dropdown label {
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    body.lang-en .color-dropdown label, body.lang-en .action-dropdown label {
+      text-align: left;
+    }
+    .color-dropdown select, .action-dropdown select {
+      width: 100%;
+      padding: clamp(10px, 1.5vw, 12px) clamp(30px, 5vw, 40px) clamp(10px, 1.5vw, 12px) clamp(10px, 2vw, 12px);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 8px;
+      background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23999" viewBox="0 0 16 16"><path d="M4.646 6.646a.5.5 0 01.708 0L8 9.293l2.646-2.647a.5.5 0 01.708.708l-3 3a.5.5 0 01-.708 0l-3-3a.5.5 0 010-.708z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: clamp(16px, 2vw, 18px) clamp(12px, 2vw, 14px);
+      text-align: right;
+      transition: border-color 0.3s;
+    }
+    body.lang-en .color-dropdown select, body.lang-en .action-dropdown select {
+      padding: clamp(10px, 1.5vw, 12px) clamp(10px, 2vw, 12px) clamp(10px, 1.5vw, 12px) clamp(30px, 5vw, 40px);
+      background-position: left 10px center;
+      text-align: left;
+    }
+    .color-dropdown select:focus, .action-dropdown select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 8px rgba(78, 115, 223, 0.3);
+      outline: none;
+    }
+    .action-dropdown select option {
+      padding-right: 30px;
+      background-repeat: no-repeat;
+      background-position: left 10px center;
+      background-size: 16px;
+    }
+    body.lang-en .action-dropdown select option {
+      padding-right: 0;
+      padding-left: 30px;
+      background-position: right 10px center;
+    }
+    .action-dropdown select option[value="eraser"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l3.5 3.5 3.5-3.5-3.5-3.5-3.5 3.5z"/></svg>'); 
+    }
+    .action-dropdown select option[value="save_painting"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></svg>'); 
+    }
+    .action-dropdown select option[value="next_design"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>'); 
+    }
+    .action-dropdown select option[value="previous_design"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M14 18l1.41-1.41L10.83 12l4.58-4.59L14 6l-6 6z"/></svg>'); 
+    }
+    .action-dropdown select option[value="reset_changes"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>'); 
+    }
+    .action-dropdown select option[value="undo"] { 
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>'); 
+    }
+    .control-panel form .form-range,
+    .control-panel form .form-control {
+      width: 100%;
+      border-radius: 8px;
+      padding: clamp(8px, 1.5vw, 10px);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+    }
+    body.lang-en .control-panel form .form-range,
+    body.lang-en .control-panel form .form-control {
+      text-align: left;
+    }
+    .slider-value {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    .btn-custom {
+      transition: transform 0.3s, background 0.3s;
+      width: 100%;
+      text-align: center;
+      border-radius: 8px;
+      padding: clamp(10px, 1.5vw, 12px);
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    body.lang-en .btn-custom {
+      text-align: center;
+    }
+    .btn-custom:hover {
+      transform: scale(1.05);
+      background: var(--hover-light);
+    }
+    body.dark-mode .btn-custom:hover {
+      background: var(--hover-dark);
+    }
+    .btn-send {
+      background: var(--border-gradient);
+      color: #fff;
+      border: none;
+    }
+    .btn-send:hover {
+      background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+    }
+    .btn-send i {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      transition: transform 0.3s;
+    }
+    body.lang-fa .btn-send i.me-2 {
+      margin-left: 12px;
+    }
+    body.lang-en .btn-send i.me-2 {
+      margin-right: 8px;
+      margin-left: 0;
+    }
+    .btn-send:hover i {
+      transform: scale(1.1);
+    }
+    .btn-increment {
+      background: var(--secondary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: clamp(10px, 1.5vw, 12px);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      transition: transform 0.3s, background 0.3s;
+    }
+    .btn-increment:hover {
+      transform: scale(1.07);
+      background: var(--accent-color);
+    }
+    .btn-increment i {
+      font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    }
+    body.lang-fa .btn-increment i {
+      margin-left: 12px;
+    }
+    body.lang-en .btn-increment i {
+      margin-right: 8px;
+    }
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: clamp(10px, 2vw, 15px);
+    }
+    .gallery-item {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    .load-more-btn {
+      margin-top: clamp(10px, 2vw, 15px);
+      width: 100%;
+      border-radius: 10px;
+      padding: clamp(10px, 1.5vw, 12px);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      transition: background 0.3s;
+      text-align: center;
+    }
+    .load-more-btn:hover {
+      background: var(--accent-color);
+    }
+    .modal-img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .modal-footer a,
+    .modal-footer button {
+      border-radius: 8px;
+      transition: transform 0.3s;
+      text-align: center;
+    }
+    body.lang-fa .modal-footer a i,
+    body.lang-fa .modal-footer button i {
+      margin-left: 12px;
+    }
+    body.lang-en .modal-footer a i,
+    body.lang-en .modal-footer button i {
+      margin-right: 8px;
+      margin-left: 0;
+    }
+    .modal-footer a:hover,
+    .modal-footer button:hover {
+      transform: scale(1.05);
+    }
+    .stream-placeholder {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+      background: #000;
+      position: relative;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .stream-placeholder i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      transition: color 0.3s, transform 0.3s;
+    }
+    .stream-placeholder:hover i {
+      color: var(--secondary-color);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    /* Notification System */
+    .notification-container {
+      position: fixed;
+      top: clamp(10px, 2vw, 20px);
+      right: clamp(10px, 2vw, 20px);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    body.lang-en .notification-container {
+      right: auto;
+      left: clamp(10px, 2vw, 20px);
+    }
+    .notification {
+      display: flex;
+      align-items: center;
+      padding: clamp(10px, 1.5vw, 12px);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: clamp(0.9rem, 1.8vw, 1rem);
+      color: #fff;
+      max-width: 300px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .notification.success {
+      background: var(--notification-success);
+    }
+    .notification.danger {
+      background: var(--notification-error);
+    }
+    .notification.info {
+      background: var(--notification-info);
+    }
+    .notification .close-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+    body.lang-en .notification .close-btn {
+      margin-left: 0;
+      margin-right: auto;
+    }
+    /* Stream Modal */
+    #streamModal .modal-dialog {
+      max-width: 90vw;
+      margin: 1.75rem auto;
+    }
+    #streamModal .modal-content {
+      background: transparent;
+      border: none;
+    }
+    #streamModal .modal-header {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      border-bottom: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    body.dark-mode #streamModal .modal-header {
+      background: #1e2a38;
+    }
+    #streamModal .modal-body {
+      padding: 0;
+      overflow: hidden;
+    }
+    #streamModal .stream-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+    #streamModal iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .main-panel {
+        margin: clamp(80px, 10vw, 100px) auto clamp(20px, 5vw, 30px);
+      }
+      .gallery-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+    @media (max-width: 576px) {
+      .main-panel {
+        margin: clamp(70px, 15vw, 90px) auto clamp(10px, 3vw, 20px);
+        padding: clamp(5px, 2vw, 10px);
+      }
+      .accordion-button {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+      }
+      .section-title {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+      }
+      .color-dropdown select, .action-dropdown select {
+        font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+      }
+      .btn-custom {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+      }
+      .notification {
+        max-width: 90vw;
+        font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+      }
+    }
+  </style>
+</head>
+<body class="dark-mode">
+  <header class="main-header">
+    <div class="header-logo">
+      <img src="/static/logo.png" alt="Logo" aria-label="Site Logo">
+      <span data-key="siteTitle">استریم نقاشی دیجیتال</span>
+    </div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="#home" data-key="navHome">خانه</a></li>
+        <li><a href="#about" data-key="navAbout">درباره ما</a></li>
+        <li><a href="#gallery" data-key="navGallery">گالری</a></li>
+        <li><a href="#contact" data-key="navContact">تماس با ما</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile">
+      <ul>
+        <li><a href="#home" data-key="navHome">خانه</a></li>
+        <li><a href="#about" data-key="navAbout">درباره ما</a></li>
+        <li><a href="#gallery" data-key="navGallery">گالری</a></li>
+        <li><a href="#contact" data-key="navContact">تماس با ما</a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="header-controls">
+      <button id="langToggle" aria-label="Change Language">
+        <i class="fas fa-language"></i> <span id="langLabel" data-key="langLabel">English</span>
+      </button>
+      <button id="themeToggle" aria-label="Change Theme">
+        <i class="fas fa-moon" id="themeIcon"></i> <span id="themeText" data-key="themeDark">Light</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-panel container">
+    <section class="accordion intro-accordion mb-4" id="introAccordion">
+      <article class="accordion-item">
+        <h1 class="accordion-header" id="introHeading">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#introCollapse" aria-expanded="false" aria-controls="introCollapse">
+            <i class="fas fa-info-circle me-2"></i> <span data-key="introHeading">معرفی سیستم</span>
+          </button>
+        </h1>
+        <div id="introCollapse" class="accordion-collapse collapse" aria-labelledby="introHeading" data-bs-parent="#introAccordion">
+          <div class="accordion-body">
+            <div class="intro-text" data-key="introText">
+              <p>کاربر گرامی، به <strong>جهان خلاقیت دیجیتال</strong> خوش آمدید! پلتفرم پیشرفته نقاشی دیجیتال ما، دروازه‌ای به سوی تجربه‌ای بی‌نظیر از <em>هنر و فناوری</em> است.</p>
+              <p>با بهره‌گیری از <strong>کنترل دقیق سرووها</strong>، <strong>استریم زنده با کیفیت بالا</strong> و <strong>اتصال لحظه‌ای وب‌سوکت</strong>، این سیستم شما را به خلق آثار هنری بی‌مانند دعوت می‌کند. کافیست رنگ دلخواه خود را انتخاب کنید و با حرکات انگشت، شاهکارهایی خلاقانه بر بوم دیجیتال بیافرینید.</p>
+              <p>طراحی شده بر پایه چارچوب <em>Flask</em> و فناوری <em>WebSocket</em>، این پلتفرم تغییرات رنگ و موقعیت سرووها را در <strong>لحظه</strong> به نمایش می‌گذارد. با تنظیمات حرفه‌ای دوربین و سروو، زوایا را به دلخواه تغییر دهید و از <em>نمای زنده</em> لذت ببرید.</p>
+              <p>گالری تصاویر ما با فناوری <em>AJAX</em> به‌صورت خودکار به‌روزرسانی می‌شود تا آثار جدید شما در لحظه به نمایش درآیند، بدون نیاز به بارگذاری مجدد.</p>
+              <p>ما در تلاشیم تا با ارائه محیطی <strong>پویا</strong>، <strong>تعاملی</strong> و <strong>کاربرپسند</strong>، خلاقیت شما را در دنیای هنر دیجیتال به اوج برسانیم.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="accordion" id="mainAccordion">
+      <article class="accordion-item camera-servo mb-4">
+        <h2 class="accordion-header" id="headingStream">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStream" aria-expanded="false" aria-controls="collapseStream">
+            <i class="fas fa-paint-brush me-2"></i> <span data-key="cameraControl">کنترل دوربین و سرووها</span>
+          </button>
+        </h2>
+        <div id="collapseStream" class="accordion-collapse collapse" aria-labelledby="headingStream" data-bs-parent="#mainAccordion">
+          <div class="accordion-body">
+            <div class="stream-section">
+              <div class="section-title"><i class="fas fa-stream me-2"></i><span data-key="liveStream">استریم زنده</span></div>
+              <div id="streamPlaceholder" class="stream-placeholder">
+                <i class="fas fa-play"></i>
+              </div>
+              <button id="toggleStreamBtn" class="btn btn-custom btn-send mt-3">
+                <i class="fas fa-stream me-2"></i> <span id="streamBtnText" data-key="startStream">شروع استریم</span>
+              </button>
+            </div>
+            <div class="color-dropdown">
+              <div class="section-title"><i class="fas fa-palette me-2"></i><span data-key="colorSelection">انتخاب رنگ</span></div>
+              <label for="colorSelect" data-key="colorSelectLabel">انتخاب رنگ برای نقاشی:</label>
+              <select id="colorSelect" class="form-select">
+                <option value="red" data-key="colorRed">قرمز</option>
+                <option value="bright_orange" data-key="colorBrightOrange">نارنجی پررنگ</option>
+                <option value="orange" data-key="colorOrange">نارنجی</option>
+                <option value="green" data-key="colorGreen">سبز</option>
+                <option value="yellow" data-key="colorYellow">زرد</option>
+                <option value="purple" data-key="colorPurple">بنفش</option>
+                <option value="brown" data-key="colorBrown">قهوه‌ای</option>
+                <option value="pink" data-key="colorPink">صورتی</option>
+                <option value="blue" selected data-key="colorBlue">آبی</option>
+                <option value="cyan" data-key="colorCyan">فیروزه‌ای</option>
+                <option value="magenta" data-key="colorMagenta">ارغوانی</option>
+                <option value="white" data-key="colorWhite">سفید</option>
+                <option value="gray" data-key="colorGray">خاکستری</option>
+                <option value="light_blue" data-key="colorLightBlue">آبی روشن</option>
+                <option value="dark_blue" data-key="colorDarkBlue">آبی تیره</option>
+                <option value="light_green" data-key="colorLightGreen">سبز روشن</option>
+                <option value="dark_green" data-key="colorDarkGreen">سبز تیره</option>
+                <option value="olive" data-key="colorOlive">زیتونی</option>
+                <option value="teal" data-key="colorTeal">سبزآبی</option>
+                <option value="violet" data-key="colorViolet">نیلی</option>
+                <option value="gold" data-key="colorGold">طلایی</option>
+                <option value="silver" data-key="colorSilver">نقره‌ای</option>
+              </select>
+              <button id="sendColorBtn" class="btn btn-custom btn-send mt-3">
+                <i class="fas fa-palette me-2"></i><span data-key="sendColor">ارسال رنگ</span>
+              </button>
+            </div>
+            <div class="action-dropdown">
+              <div class="section-title"><i class="fas fa-tools me-2"></i><span data-key="paintingActions">اقدامات نقاشی</span></div>
+              <label for="actionSelect" data-key="actionSelectLabel">اقدامات نقاشی:</label>
+              <select id="actionSelect" class="form-select">
+                <option value="eraser" data-key="actionEraser">پاک‌کن</option>
+                <option value="save_painting" data-key="actionSavePainting">ذخیره نقاشی</option>
+                <option value="next_design" data-key="actionNextDesign">طرح بعدی</option>
+                <option value="previous_design" data-key="actionPreviousDesign">طرح قبلی</option>
+                <option value="reset_changes" data-key="actionResetChanges">بازنشانی تغییرات</option>
+                <option value="undo" data-key="actionUndo">عقب‌گرد</option>
+              </select>
+              <button id="sendActionBtn" class="btn btn-custom btn-send mt-3">
+                <i class="fas fa-tools me-2"></i><span data-key="sendAction">ارسال اقدام</span>
+              </button>
+            </div>
+            <div class="servo-section">
+              <div class="section-title"><i class="fas fa-cog me-2"></i><span data-key="servoControl">کنترل سرووها</span></div>
+              <form id="servoForm" class="mt-4 control-panel">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="servoX" class="form-label">
+                      <i class="fas fa-arrows-alt-h me-2"></i><span data-key="axisX">محور X</span>: 
+                      <span id="servoXValue" class="slider-value">90</span>°
+                    </label>
+                    <input type="range" class="form-range" id="servoX" name="servoX" min="0" max="180" value="90" aria-label="Adjust X Axis">
+                    <input type="number" class="form-control mt-2" id="servoXNumber" min="0" max="180" value="90" aria-label="X Axis Value">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="servoY" class="form-label">
+                      <i class="fas fa-arrows-alt-v me-2"></i><span data-key="axisY">محور Y</span>: 
+                      <span id="servoYValue" class="slider-value">90</span>°
+                    </label>
+                    <input type="range" class="form-range" id="servoY" name="servoY" min="0" max="180" value="90" aria-label="Adjust Y Axis">
+                    <input type="number" class="form-control mt-2" id="servoYNumber" min="0" max="180" value="90" aria-label="Y Axis Value">
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <label class="form-label" data-key="incrementalAdjustment"><i class="fas fa-cog me-2"></i>تنظیم تدریجی (5 درجه):</label>
+                  <div class="row g-2">
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('X', 5)" aria-label="Increase X Axis">
+                        <i class="fas fa-plus"></i> <span data-key="incrementXPlus">X +5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('X', -5)" aria-label="Decrease X Axis">
+                        <i class="fas fa-minus"></i> <span data-key="incrementXMinus">X -5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('Y', 5)" aria-label="Increase Y Axis">
+                        <i class="fas fa-plus"></i> <span data-key="incrementYPlus">Y +5°</span>
+                      </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <button type="button" class="btn btn-increment" onclick="adjustAngle('Y', -5)" aria-label="Decrease Y Axis">
+                        <i class="fas fa-minus"></i> <span data-key="incrementYMinus">Y -5°</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-grid gap-3 mt-4">
+                  <button type="submit" class="btn btn-send btn-custom" aria-label="Send Servo Settings">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    <span data-key="send">ارسال</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="accordion-item">
+        <h2 class="accordion-header" id="headingGallery">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGallery" aria-expanded="false" aria-controls="collapseGallery">
+            <i class="fas fa-images me-2"></i> <span data-key="gallery">گالری تصاویر</span>
+          </button>
+        </h2>
+        <div id="collapseGallery" class="accordion-collapse collapse" aria-labelledby="headingGallery" data-bs-parent="#mainAccordion">
+          <div class="accordion-body">
+            <div id="galleryContainer" class="gallery-container">
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3 data-key="footerAbout">درباره ما</h3>
+        <p data-key="footerAboutText">ما در استریم نقاشی دیجیتال، با ترکیب هنر و فناوری، بستری خلاقانه برای خلق آثار دیجیتال فراهم کرده‌ایم. هدف ما، ارتقای تجربه هنری شماست.</p>
+      </div>
+      <div class="footer-section">
+        <h3 data-key="footerLinks">لینک‌های مفید</h3>
+        <ul>
+          <li><a href="#home" data-key="navHome">خانه</a></li>
+          <li><a href="#gallery" data-key="navGallery">گالری</a></li>
+          <li><a href="#contact" data-key="navContact">تماس با ما</a></li>
+          <li><a href="#terms" data-key="footerTerms">شرایط و قوانین</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3 data-key="footerConnect">با ما در ارتباط باشید</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-key="footerCopyright">© 2025 استریم نقاشی دیجیتال. تمامی حقوق محفوظ است.</p>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="streamModal" tabindex="-1" aria-labelledby="streamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="streamModalLabel" data-key="liveStream">استریم زنده</h3>
+          <button type="button" class="btn btn-danger" id="closeStreamBtn" aria-label="Stop Stream"><i class="fas fa-stop me-2"></i><span data-key="stopStream">قطع استریم</span></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="stream-container">
+            <iframe id="modalStreamIframe" src="" frameborder="0" allowfullscreen title="Digital Painting Live Stream"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="imageModalLabel" data-key="viewImage">نمایش تصویر</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" class="modal-img" src="" alt="Digital Painting Image" loading="lazy">
+        </div>
+        <div class="modal-footer">
+          <a id="downloadBtn" href="#" download class="btn btn-success" data-key="download"><i class="fas fa-download me-2"></i>دانلود</a>
+          <button type="button" class="btn btn-danger" id="deleteBtn" data-key="deleteImage"><i class="fas fa-trash me-2"></i>حذف تصویر</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="close"><i class="fas fa-times me-2"></i>بستن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Translation dictionary
+    const translations = {
+      fa: {
+        siteTitle: "استریم نقاشی دیجیتال",
+        navHome: "خانه",
+        navAbout: "درباره ما",
+        navGallery: "گالری",
+        navContact: "تماس با ما",
+        footerAbout: "درباره ما",
+        footerAboutText: "ما در استریم نقاشی دیجیتال، با ترکیب هنر و فناوری، بستری خلاقانه برای خلق آثار دیجیتال فراهم کرده‌ایم. هدف ما، ارتقای تجربه هنری شماست.",
+        footerLinks: "لینک‌های مفید",
+        footerTerms: "شرایط و قوانین",
+        footerConnect: "با ما در ارتباط باشید",
+        footerCopyright: "© 2025 استریم نقاشی دیجیتال. تمامی حقوق محفوظ است.",
+        introHeading: "معرفی سیستم",
+        introText: `
+          <p>کاربر گرامی، به <strong>جهان خلاقیت دیجیتال</strong> خوش آمدید! پلتفرم پیشرفته نقاشی دیجیتال ما، دروازه‌ای به سوی تجربه‌ای بی‌نظیر از <em>هنر و فناوری</em> است.</p>
+          <p>با بهره‌گیری از <strong>کنترل دقیق سرووها</strong>، <strong>استریم زنده با کیفیت بالا</strong> و <strong>اتصال لحظه‌ای وب‌سوکت</strong>، این سیستم شما را به خلق آثار هنری بی‌مانند دعوت می‌کند. کافیست رنگ دلخواه خود را انتخاب کنید و با حرکات انگشت، شاهکارهایی خلاقانه بر بوم دیجیتال بیافرینید.</p>
+          <p>طراحی شده بر پایه چارچوب <em>Flask</em> و فناوری <em>WebSocket</em>، این پلتفرم تغییرات رنگ و موقعیت سرووها را در <strong>لحظه</strong> به نمایش می‌گذارد. با تنظیمات حرفه‌ای دوربین و سروو، زوایا را به دلخواه تغییر دهید و از <em>نمای زنده</em> لذت ببرید.</p>
+          <p>گالری تصاویر ما با فناوری <em>AJAX</em> به‌صورت خودکار به‌روزرسانی می‌شود تا آثار جدید شما در لحظه به نمایش درآیند، بدون نیاز به بارگذاری مجدد.</p>
+          <p>ما در تلاشیم تا با ارائه محیطی <strong>پویا</strong>، <strong>تعاملی</strong> و <strong>کاربرپسند</strong>، خلاقیت شما را در دنیای هنر دیجیتال به اوج برسانیم.</p>
+        `,
+        cameraControl: "کنترل دوربین و سرووها",
+        axisX: "محور X",
+        axisY: "محور Y",
+        incrementalAdjustment: "تنظیم تدریجی (5 درجه)",
+        send: "ارسال",
+        gallery: "گالری تصاویر",
+        loadMore: "بارگذاری تصاویر قدیمی‌تر",
+        viewImage: "نمایش تصویر",
+        download: "دانلود",
+        deleteImage: "حذف تصویر",
+        close: "بستن",
+        colorSelectLabel: "انتخاب رنگ برای نقاشی:",
+        sendColor: "ارسال رنگ",
+        actionSelectLabel: "اقدامات نقاشی:",
+        sendAction: "ارسال اقدام",
+        langLabel: "English",
+        themeLight: "حالت روز",
+        themeDark: "حالت شب",
+        liveStream: "استریم زنده",
+        startStream: "شروع استریم",
+        stopStream: "قطع استریم",
+        colorSelection: "انتخاب رنگ",
+        paintingActions: "اقدامات نقاشی",
+        servoControl: "کنترل سرووها",
+        incrementXPlus: "X +5°",
+        incrementXMinus: "X -5°",
+        incrementYPlus: "Y +5°",
+        incrementYMinus: "Y -5°",
+        colorRed: "قرمز",
+        colorBrightOrange: "نارنجی پررنگ",
+        colorOrange: "نارنجی",
+        colorGreen: "سبز",
+        colorYellow: "زرد",
+        colorPurple: "بنفش",
+        colorBrown: "قهوه‌ای",
+        colorPink: "صورتی",
+        colorBlue: "آبی",
+        colorCyan: "فیروزه‌ای",
+        colorMagenta: "ارغوانی",
+        colorWhite: "سفید",
+        colorGray: "خاکستری",
+        colorLightBlue: "آبی روشن",
+        colorDarkBlue: "آبی تیره",
+        colorLightGreen: "سبز روشن",
+        colorDarkGreen: "سبز تیره",
+        colorOlive: "زیتونی",
+        colorTeal: "سبزآبی",
+        colorViolet: "نیلی",
+        colorGold: "طلایی",
+        colorSilver: "نقره‌ای",
+        actionEraser: "پاک‌کن",
+        actionSavePainting: "ذخیره نقاشی",
+        actionNextDesign: "طرح بعدی",
+        actionPreviousDesign: "طرح قبلی",
+        actionResetChanges: "بازنشانی تغییرات",
+        actionUndo: "عقب‌گرد",
+        connectionError: "خطا در اتصال",
+        angleError: "زاویه‌ها باید بین 0 تا 180 باشند.",
+        colorError: "خطا در ارسال رنگ",
+        actionError: "خطا در ارسال اقدام",
+        galleryError: "خطا در بارگذاری گالری",
+        deleteError: "خطا در حذف تصویر",
+        colorChanged: "رنگ تغییر یافت: ",
+        actionPerformed: "اقدام انجام شد: ",
+        colorReceived: "رنگ از سرور دریافت شد: ",
+        actionReceived: "اقدام از سرور دریافت شد: "
+      },
+      en: {
+        siteTitle: "Digital Painting Stream",
+        navHome: "Home",
+        navAbout: "About Us",
+        navGallery: "Gallery",
+        navContact: "Contact Us",
+        footerAbout: "About Us",
+        footerAboutText: "At Digital Painting Stream, we combine art and technology to provide a creative platform for crafting digital masterpieces. Our goal is to elevate your artistic experience.",
+        footerLinks: "Useful Links",
+        footerTerms: "Terms & Conditions",
+        footerConnect: "Connect With Us",
+        footerCopyright: "© 2025 Digital Painting Stream. All rights reserved.",
+        introHeading: "System Introduction",
+        introText: `
+          <p>Welcome, dear user, to the <strong>world of digital creativity</strong>! Our advanced digital painting platform is your gateway to an unparalleled experience of <em>art and technology</em>.</p>
+          <p>Powered by <strong>precise servo control</strong>, <strong>high-quality live streaming</strong>, and <strong>real-time WebSocket connectivity</strong>, this system invites you to create extraordinary artworks. Simply select your desired color and, with the touch of your finger, craft masterpieces on a digital canvas.</p>
+          <p>Built on the <em>Flask</em> framework and <em>WebSocket</em> technology, our platform displays color changes and servo adjustments in <strong>real time</strong>. With professional camera and servo settings, customize angles to your preference and enjoy a <em>live view</em>.</p>
+          <p>Our image gallery, powered by <em>AJAX</em>, automatically updates to showcase your latest creations instantly, without requiring a page reload.</p>
+          <p>We strive to deliver a <strong>dynamic</strong>, <strong>interactive</strong>, and <strong>user-friendly</strong> environment that elevates your creativity to new heights in the realm of digital art.</p>
+        `,
+        cameraControl: "Camera & Servo Control",
+        axisX: "Axis X",
+        axisY: "Axis Y",
+        incrementalAdjustment: "Incremental Adjustment (5°)",
+        send: "Send",
+        gallery: "Image Gallery",
+        loadMore: "Load More Images",
+        viewImage: "View Image",
+        download: "Download",
+        deleteImage: "Delete Image",
+        close: "Close",
+        colorSelectLabel: "Select color for painting:",
+        sendColor: "Send Color",
+        actionSelectLabel: "Painting actions:",
+        sendAction: "Send Action",
+        langLabel: "فارسی",
+        themeLight: "Light",
+        themeDark: "Dark",
+        liveStream: "Live Stream",
+        startStream: "Start Stream",
+        stopStream: "Stop Stream",
+        colorSelection: "Color Selection",
+        paintingActions: "Painting Actions",
+        servoControl: "Servo Control",
+        incrementXPlus: "X +5°",
+        incrementXMinus: "X -5°",
+        incrementYPlus: "Y +5°",
+        incrementYMinus: "Y -5°",
+        colorRed: "Red",
+        colorBrightOrange: "Bright Orange",
+        colorOrange: "Orange",
+        colorGreen: "Green",
+        colorYellow: "Yellow",
+        colorPurple: "Purple",
+        colorBrown: "Brown",
+        colorPink: "Pink",
+        colorBlue: "Blue",
+        colorCyan: "Cyan",
+        colorMagenta: "Magenta",
+        colorWhite: "White",
+        colorGray: "Gray",
+        colorLightBlue: "Light Blue",
+        colorDarkBlue: "Dark Blue",
+        colorLightGreen: "Light Green",
+        colorDarkGreen: "Dark Green",
+        colorOlive: "Olive",
+        colorTeal: "Teal",
+        colorViolet: "Violet",
+        colorGold: "Gold",
+        colorSilver: "Silver",
+        actionEraser: "Eraser",
+        actionSavePainting: "Save Painting",
+        actionNextDesign: "Next Design",
+        actionPreviousDesign: "Previous Design",
+        actionResetChanges: "Reset Changes",
+        actionUndo: "Undo",
+        connectionError: "Connection error",
+        angleError: "Angles must be between 0 and 180.",
+        colorError: "Error sending color",
+        actionError: "Error sending action",
+        galleryError: "Error loading gallery",
+        deleteError: "Error deleting image",
+        colorChanged: "Color changed: ",
+        actionPerformed: "Action performed: ",
+        colorReceived: "Color received: ",
+        actionReceived: "Action received: "
+      }
+    };
+
+    // Language state
+    let currentLang = localStorage.getItem('language') || 'fa';
+
+    // Update language and direction
+    function updateLanguage() {
+      document.documentElement.lang = currentLang;
+      document.title = translations[currentLang].siteTitle;
+      document.body.classList.remove('lang-fa', 'lang-en');
+      document.body.classList.add(`lang-${currentLang}`);
+      document.querySelectorAll("[data-key]").forEach(el => {
+        const key = el.getAttribute("data-key");
+        if (translations[currentLang][key]) {
+          if (el.tagName === 'BUTTON' || el.tagName === 'A') {
+            const icon = el.querySelector('i');
+            el.innerHTML = icon ? `<i class="${icon.className} ${currentLang === 'en' ? 'me-2' : 'me-2'}"></i>${translations[currentLang][key]}` : translations[currentLang][key];
+          } else {
+            el.innerHTML = translations[currentLang][key];
+          }
+        }
+      });
+      const colorSelect = document.getElementById('colorSelect');
+      Array.from(colorSelect.options).forEach(option => {
+        const key = option.getAttribute('data-key');
+        if (key && translations[currentLang][key]) {
+          option.text = translations[currentLang][key];
+        }
+      });
+      const actionSelect = document.getElementById('actionSelect');
+      Array.from(actionSelect.options).forEach(option => {
+        const key = option.getAttribute('data-key');
+        if (key && translations[currentLang][key]) {
+          option.text = translations[currentLang][key];
+        }
+      });
+      const streamBtnText = document.getElementById('streamBtnText');
+      const isStreaming = streamBtnText.innerText === translations.fa.stopStream || streamBtnText.innerText === translations.en.stopStream;
+      streamBtnText.innerText = isStreaming ? translations[currentLang].stopStream : translations[currentLang].startStream;
+      document.getElementById('langToggle').setAttribute('aria-label', translations[currentLang].langLabel);
+      document.getElementById('themeToggle').setAttribute('aria-label', translations[currentLang][document.body.classList.contains('dark-mode') ? 'themeLight' : 'themeDark']);
+      document.getElementById('toggleStreamBtn').setAttribute('aria-label', translations[currentLang].startStream);
+      document.getElementById('closeStreamBtn').setAttribute('aria-label', translations[currentLang].stopStream);
+    }
+
+    // Initial language update
+    updateLanguage();
+
+    // Language toggle
+    document.getElementById('langToggle').onclick = () => {
+      currentLang = currentLang === 'fa' ? 'en' : 'fa';
+      localStorage.setItem('language', currentLang);
+      updateLanguage();
+    };
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    themeToggle.onclick = () => {
+      if (document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+        themeIcon.className = "fas fa-sun";
+        themeText.innerText = translations[currentLang].themeDark;
+        themeText.setAttribute('data-key', 'themeDark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+        themeIcon.className = "fas fa-moon";
+        themeText.innerText = translations[currentLang].themeLight;
+        themeText.setAttribute('data-key', 'themeLight');
+        localStorage.setItem('theme', 'dark');
+      }
+      document.getElementById('themeToggle').setAttribute('aria-label', translations[currentLang][document.body.classList.contains('dark-mode') ? 'themeLight' : 'themeDark']);
+    };
+
+    // Load stored theme
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.classList.remove('light-mode', 'dark-mode');
+    document.body.classList.add(storedTheme === 'dark' ? 'dark-mode' : 'light-mode');
+    if (storedTheme === 'dark') {
+      themeIcon.className = "fas fa-moon";
+      themeText.innerText = translations[currentLang].themeLight;
+      themeText.setAttribute('data-key', 'themeLight');
+    } else {
+      themeIcon.className = "fas fa-sun";
+      themeText.innerText = translations[currentLang].themeDark;
+      themeText.setAttribute('data-key', 'themeDark');
+    }
+
+    // Hamburger menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMobile = document.querySelector('.nav-mobile');
+    hamburger.onclick = () => {
+      navMobile.classList.toggle('active');
+      hamburger.querySelector('i').classList.toggle('fa-bars');
+      hamburger.querySelector('i').classList.toggle('fa-times');
+    };
+
+    // Header scroll behavior
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.main-header');
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > lastScrollTop && currentScroll > 100) {
+        header.classList.add('hidden');
+      } else {
+        header.classList.remove('hidden');
+      }
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    // Servo controls
+    const servoXSlider = document.getElementById('servoX');
+    const servoYSlider = document.getElementById('servoY');
+    const servoXNumber = document.getElementById('servoXNumber');
+    const servoYNumber = document.getElementById('servoYNumber');
+    const servoXValue = document.getElementById('servoXValue');
+    const servoYValue = document.getElementById('servoYValue');
+
+    // Load stored values
+    const storedColor = localStorage.getItem('selectedColor');
+    if (storedColor) {
+      document.getElementById('colorSelect').value = storedColor;
+    }
+    const storedServoX = localStorage.getItem('servoX');
+    const storedServoY = localStorage.getItem('servoY');
+    if (storedServoX) {
+      servoXSlider.value = storedServoX;
+      servoXNumber.value = storedServoX;
+      servoXValue.innerText = storedServoX;
+    }
+    if (storedServoY) {
+      servoYSlider.value = storedServoY;
+      servoYNumber.value = storedServoY;
+      servoYValue.innerText = storedServoY;
+    }
+
+    // Servo input handlers
+    servoXSlider.oninput = () => {
+      servoXValue.innerText = servoXSlider.value;
+      servoXNumber.value = servoXSlider.value;
+      localStorage.setItem('servoX', servoXSlider.value);
+    };
+    servoYSlider.oninput = () => {
+      servoYValue.innerText = servoYSlider.value;
+      servoYNumber.value = servoYSlider.value;
+      localStorage.setItem('servoY', servoYSlider.value);
+    };
+    servoXNumber.oninput = () => {
+      servoXValue.innerText = servoXNumber.value;
+      servoXSlider.value = servoXNumber.value;
+      localStorage.setItem('servoX', servoXNumber.value);
+    };
+    servoYNumber.oninput = () => {
+      servoYValue.innerText = servoYNumber.value;
+      servoYSlider.value = servoYNumber.value;
+      localStorage.setItem('servoY', servoYNumber.value);
+    };
+
+    // Custom notification system
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('notificationContainer');
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <span>${message}</span>
+        <button class="close-btn">&times;</button>
+      `;
+      container.appendChild(notification);
+      setTimeout(() => { notification.classList.add('show'); }, 100);
+      const closeBtn = notification.querySelector('.close-btn');
+      closeBtn.onclick = () => { notification.remove(); };
+      setTimeout(() => { notification.remove(); }, 5000);
+    }
+
+    // Adjust servo angle
+    async function adjustAngle(axis, delta) {
+      let slider, numberInput, valueSpan;
+      if (axis === 'X') { slider = servoXSlider; numberInput = servoXNumber; valueSpan = servoXValue; }
+      else { slider = servoYSlider; numberInput = servoYNumber; valueSpan = servoYValue; }
+      let currentValue = parseInt(slider.value);
+      let newValue = Math.max(0, Math.min(180, currentValue + delta));
+      slider.value = newValue;
+      numberInput.value = newValue;
+      valueSpan.innerText = newValue;
+      localStorage.setItem('servo' + axis, newValue);
+      const data = { servoX: servoXSlider.value, servoY: servoYSlider.value };
+      try {
+        const response = await fetch('/set_servo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        showNotification(result.message, result.status === 'success' ? 'success' : 'danger');
+      } catch (err) {
+        showNotification(translations[currentLang].connectionError, 'danger');
+      }
+    }
+
+    // Servo form submission
+    document.getElementById('servoForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const data = { servoX: servoXSlider.value, servoY: servoYSlider.value };
+      if (data.servoX < 0 || data.servoX > 180 || data.servoY < 0 || data.servoY > 180) {
+        showNotification(translations[currentLang].angleError, 'danger');
+        return;
+      }
+      try {
+        const response = await fetch('/set_servo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        showNotification(result.message, result.status === 'success' ? 'success' : 'danger');
+      } catch (err) {
+        showNotification(translations[currentLang].connectionError, 'danger');
+      }
+    };
+
+    // Send color
+    document.getElementById('sendColorBtn').onclick = async () => {
+      const colorSelect = document.getElementById('colorSelect');
+      let selectedColor = colorSelect.value;
+      localStorage.setItem('selectedColor', selectedColor);
+      if (ws && ws.readyState === ws.OPEN) {
+        ws.send(JSON.stringify({ color: selectedColor }));
+        showNotification(`${translations[currentLang].colorChanged} ${colorSelect.options[colorSelect.selectedIndex].text}`, 'success');
+      } else {
+        try {
+          const response = await fetch('/set_color', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ color: selectedColor })
+          });
+          const result = await response.json();
+          showNotification(result.message, result.status === 'success' ? 'success' : 'danger');
+        } catch (err) {
+          showNotification(translations[currentLang].colorError, 'danger');
+        }
+      }
+    };
+
+    // Send action
+    document.getElementById('sendActionBtn').onclick = async () => {
+      const actionSelect = document.getElementById('actionSelect');
+      let selectedAction = actionSelect.value;
+      if (ws && ws.readyState === ws.OPEN) {
+        ws.send(JSON.stringify({ action: selectedAction }));
+        showNotification(`${translations[currentLang].actionPerformed} ${actionSelect.options[actionSelect.selectedIndex].text}`, 'success');
+      } else {
+        try {
+          const response = await fetch('/set_action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: selectedAction })
+          });
+          const result = await response.json();
+          showNotification(result.message, result.status === 'success' ? 'success' : 'danger');
+        } catch (err) {
+          showNotification(translations[currentLang].actionError, 'danger');
+        }
+      }
+    };
+
+    // WebSocket initialization
+    let ws;
+    function initWS() {
+      ws = new WebSocket("ws://services.fin2.chabokan.net:29434/ws");
+      ws.onopen = () => { console.log("WebSocket connection established"); };
+      ws.onmessage = (message) => {
+        try {
+          const msg = JSON.parse(message.data);
+          if (msg.color) {
+            document.getElementById('colorSelect').value = msg.color;
+            showNotification(`${translations[currentLang].colorReceived} ${msg.color}`, 'info');
+          } else if (msg.action) {
+            document.getElementById('actionSelect').value = msg.action;
+            showNotification(`${translations[currentLang].actionReceived} ${msg.action}`, 'info');
+          }
+        } catch (e) {
+          console.error("Error processing WebSocket message", e);
+        }
+      };
+      ws.onclose = () => { console.log("WebSocket connection closed"); setTimeout(initWS, 5000); };
+      ws.onerror = (err) => { console.error("WebSocket Error:", err); ws.close(); };
+    }
+    initWS();
+
+    // Stream handling
+    const streamPlaceholder = document.getElementById('streamPlaceholder');
+    const toggleStreamBtn = document.getElementById('toggleStreamBtn');
+    const streamModal = new bootstrap.Modal(document.getElementById('streamModal'), { backdrop: 'static' });
+    let isStreaming = false;
+
+    toggleStreamBtn.onclick = () => {
+      if (!isStreaming) {
+        document.getElementById('modalStreamIframe').src = "http://services.fin2.chabokan.net:26305/video_feed";
+        document.getElementById('streamBtnText').innerText = translations[currentLang].stopStream;
+        toggleStreamBtn.setAttribute('aria-label', translations[currentLang].stopStream);
+        streamModal.show();
+        isStreaming = true;
+      } else {
+        document.getElementById('modalStreamIframe').src = "";
+        document.getElementById('streamBtnText').innerText = translations[currentLang].startStream;
+        toggleStreamBtn.setAttribute('aria-label', translations[currentLang].startStream);
+        streamModal.hide();
+        isStreaming = false;
+      }
+    };
+
+    streamPlaceholder.onclick = () => {
+      if (!isStreaming) {
+        document.getElementById('modalStreamIframe').src = "http://services.fin2.chabokan.net:26305/video_feed";
+        document.getElementById('streamBtnText').innerText = translations[currentLang].stopStream;
+        toggleStreamBtn.setAttribute('aria-label', translations[currentLang].stopStream);
+        streamModal.show();
+        isStreaming = true;
+      }
+    };
+
+    document.getElementById('closeStreamBtn').onclick = () => {
+      document.getElementById('modalStreamIframe').src = "";
+      document.getElementById('streamBtnText').innerText = translations[currentLang].startStream;
+      toggleStreamBtn.setAttribute('aria-label', translations[currentLang].startStream);
+      streamModal.hide();
+      isStreaming = false;
+    };
+
+    // Gallery loading
+    async function loadGallery() {
+      try {
+        const response = await fetch(`/get_gallery?offset=0`);
+        const data = await response.json();
+        const container = document.getElementById('galleryContainer');
+        container.innerHTML = "";
+        data.image_urls.forEach(url => {
+          const div = document.createElement('div');
+          div.className = 'gallery-item';
+          div.innerHTML = `<img src="${url}" alt="${translations[currentLang].digitalPaintingImage || 'Digital Painting Image'}" loading="lazy" onclick="openModal('${url}')">`;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        showNotification(translations[currentLang].galleryError, 'danger');
+      }
+    }
+    setInterval(loadGallery, 5000);
+    window.onload = loadGallery;
+
+    // Image modal
+    function openModal(imageUrl) {
+      document.getElementById('modalImage').src = imageUrl;
+      document.getElementById('downloadBtn').href = imageUrl;
+      document.getElementById('deleteBtn').setAttribute('data-filename', imageUrl.split('/').pop());
+      const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+      imageModal.show();
+    }
+
+    // Delete image
+    document.getElementById('deleteBtn').onclick = async () => {
+      const filename = document.getElementById('deleteBtn').getAttribute('data-filename');
+      try {
+        const response = await fetch('/delete_image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: filename })
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+          showNotification(result.message, 'success');
+          const galleryItems = document.querySelectorAll('.gallery-item img');
+          galleryItems.forEach(img => {
+            if (img.src.endsWith(filename)) { img.parentElement.remove(); }
+          });
+          const modalEl = document.getElementById('imageModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal.hide();
+        } else {
+          showNotification(result.message, 'danger');
+        }
+      } catch (err) {
+        showNotification(translations[currentLang].deleteError, 'danger');
+      }
+    };
+  </script>
+  </body>
+  </html>
